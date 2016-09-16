@@ -42,8 +42,19 @@ class ViewController: UIViewController, UIWebViewDelegate {
     // MARK: - UIWebViewDelegate
     public func webView(_ webView: UIWebView, shouldStartLoadWith request: URLRequest, navigationType: UIWebViewNavigationType) -> Bool
     {
-        // shouldStart
-        return true;
+        // 截获指定链接，调起默认浏览器打开（浏览器一般都会注册http、https这些通用url scheme）
+        //  http://stackoverflow.com/questions/12416469/how-to-launch-safari-and-open-url-from-ios-app
+        //  http://stackoverflow.com/questions/822599/how-can-i-launch-safari-from-an-iphone-app
+        //  http://stackoverflow.com/questions/26704852/osx-swift-open-url-in-default-browser
+        if (request.url?.absoluteString == "https://developer.apple.com/swift/blog/") {
+            if (UIApplication.shared.canOpenURL(request.url!)) {
+                UIApplication.shared.open(request.url!, options:[:], completionHandler:nil);
+                return false;
+            }
+            return true;
+        } else {
+            return true;
+        }
     }
     
     public func webViewDidStartLoad(_ webView: UIWebView)
